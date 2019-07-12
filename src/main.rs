@@ -9,8 +9,11 @@ use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::json::Json;
 use rocket::http::RawStr;
 
+use serde::Serialize;
+
+
 #[get("/wifis")]
-fn index() -> Json<Vec<String>> {
+fn index() -> Json<Vec<Wifi>> {
 
     let mut echo_hello = Command::new("ls");
     echo_hello.arg("-la");
@@ -18,13 +21,23 @@ fn index() -> Json<Vec<String>> {
 
     let output = String::from_utf8_lossy(&hello_1.stdout);
 
-    let mut lines : Vec<String> = Vec::new();
+    let mut lines : Vec<Wifi> = Vec::new();
 
     for line in output.as_ref().lines() {
-        lines.push(String::from(line));
+        //lines.push(String::from(line));
+
+        lines.push(Wifi{ssid: String::from("SSID"), speed : String::from("1234"), security: String::from("WPA")});
+
     }
 
     return Json(lines);
+}
+
+#[derive(Serialize)]
+pub struct Wifi {
+    pub ssid : String,
+    pub speed : String,
+    pub security : String
 }
 
 #[post("/wifi/<ssid>/connect")]

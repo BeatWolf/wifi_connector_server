@@ -7,9 +7,9 @@ use std::process::Command;
 
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::json::Json;
+use rocket::http::RawStr;
 
-
-#[get("/")]
+#[get("/wifis")]
 fn index() -> Json<Vec<String>> {
 
     let mut echo_hello = Command::new("ls");
@@ -26,6 +26,12 @@ fn index() -> Json<Vec<String>> {
 
     return Json(lines);
 }
+
+#[post("/wifi/<ssid>/connect")]
+fn connect(ssid : &RawStr) -> String{
+    return String::from("test");
+}
+
 
 fn main(){
     rocket::ignite().mount("/api", routes![index]).mount("/", StaticFiles::from("static")).launch();

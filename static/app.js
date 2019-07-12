@@ -4,7 +4,7 @@ var app = new Vue({
         wifis: []
     },
     mounted() {
-        axios.get('api')
+        axios.get('api/wifis')
             .then(response => (this.wifis = response.data))
     }
 })

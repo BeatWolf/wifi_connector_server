@@ -26,7 +26,13 @@ fn index() -> Json<Vec<Wifi>> {
     for line in output.as_ref().lines() {
         //lines.push(String::from(line));
 
-        lines.push(Wifi{ssid: String::from("SSID"), speed : String::from("1234"), security: String::from("WPA")});
+        if !line.starts_with("IN-USE") {
+            let split_line = line.split_ascii_whitespace().collect::<Vec<&str>>();
+
+            if split_line.len() > 6 {
+                lines.push(Wifi{ssid: String::from("SSID"), speed : String::from("1234"), security: String::from("WPA")});
+            }
+        }
 
     }
 

@@ -1,10 +1,10 @@
 var app = new Vue({
     el: '#app',
     data: {
-        message: 'Hello Vue!'
+        wifis: []
     },
     mounted() {
         axios.get('api')
-            .then(response => (this.message = response.data))
+            .then(response => (this.wifis = response.data))
     }
 })

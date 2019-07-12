@@ -3,12 +3,28 @@
 #[macro_use]
 extern crate rocket;
 
+use std::process::Command;
 
 use rocket_contrib::serve::StaticFiles;
+use rocket_contrib::json::Json;
+
 
 #[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+fn index() -> Json<Vec<String>> {
+
+    let mut echo_hello = Command::new("ls");
+    echo_hello.arg("-la");
+    let hello_1 = echo_hello.output().expect("failed to execute process");
+
+    let output = String::from_utf8_lossy(&hello_1.stdout);
+
+    let mut lines : Vec<String> = Vec::new();
+
+    for line in output.as_ref().lines() {
+        lines.push(String::from(line));
+    }
+
+    return Json(lines);
 }
 
 fn main(){

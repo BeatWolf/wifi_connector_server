@@ -11,9 +11,22 @@
 My great test
 
 <div id="app">
-    <div v-for="wifi in wifis">
-        {{ wifi }} <br>
-    </div>
+    <table>
+        <tr>
+            <th>SSID</th>
+            <th>Speed</th>
+            <th>Security</th>
+            <th>Password</th>
+            <th><br></th>
+        </tr>
+        <tr v-for="wifi in wifis">
+            <td>{{ wifi.ssid }}</td>
+            <td>{{ wifi.speed }}</td>
+            <td>{{ wifi.security }}</td>
+            <td><input type="text" name="fname"></td>
+            <td><button type="button">Connect</button></td>
+        </tr>
+    </table>
 </div>
 
 </body>

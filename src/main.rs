@@ -12,8 +12,8 @@ use rocket::http::RawStr;
 #[get("/wifis")]
 fn index() -> Json<Vec<String>> {
 
-    let mut echo_hello = Command::new("ls");
-    echo_hello.arg("-la");
+    let mut echo_hello = Command::new("nmcli");
+    echo_hello.arg("-c").arg("no").arg("dev").arg("wifi");
     let hello_1 = echo_hello.output().expect("failed to execute process");
 
     let output = String::from_utf8_lossy(&hello_1.stdout);

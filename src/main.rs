@@ -58,12 +58,12 @@ pub struct CustomWifi {
     pub security : String
 }
 
-#[post("/wifi/<ssid>/connect")]
+#[get("/wifi/<ssid>/connect")]
 fn connect(ssid : &RawStr) -> String{
     return String::from("test");
 }
 
 
 fn main(){
-    rocket::ignite().mount("/api", routes![index]).mount("/", StaticFiles::from("static")).launch();
+    rocket::ignite().mount("/api", routes![index, connect]).mount("/", StaticFiles::from("static")).launch();
 }

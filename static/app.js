@@ -6,5 +6,11 @@ var app = new Vue({
     mounted() {
         axios.get('api/wifis')
             .then(response => (this.wifis = response.data))
+    },
+    methods: {
+        connect(ssid, password) {
+            axios.get('api/wifi/'+ssid +"/connect")
+        }
     }
+
 })

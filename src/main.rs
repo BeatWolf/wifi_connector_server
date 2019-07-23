@@ -10,8 +10,8 @@ use rocket_contrib::json::Json;
 use rocket::http::RawStr;
 
 use serde::Serialize;
+use serde::Deserialize;
 use std::collections::HashMap;
-use std::ops::Deref;
 
 #[get("/wifis")]
 fn index() -> Json<Vec<CustomWifi>> {
@@ -58,9 +58,15 @@ pub struct CustomWifi {
     pub security : String
 }
 
-#[post("/wifi/<ssid>/connect")]
-fn connect(ssid : &RawStr) -> String{
-    return String::from("test");
+#[derive(Deserialize)]
+pub struct Password {
+    pub password : String
+}
+
+
+#[post("/wifi/<ssid>/connect", format = "json", data = "<password>")]
+fn connect(ssid : &RawStr, password: Json<Password>) -> String{
+    return format!("{} {}", String::from("test"), password.password);
 }
 
 

@@ -24,9 +24,12 @@ My great test
             <td>{{ wifi.ssid }}</td>
             <td>{{ wifi.speed }}</td>
             <td>{{ wifi.security }}</td>
-            <td><input type="text" v-model="'password'+wifi.ssid" placeholder="edit me"/></td>
             <td>
-                <button type="submit" v-on:click="connect(wifi.ssid, password)">Connect</button>
+                <!-- https://stackoverflow.com/questions/43364487/dynamic-v-model-name-in-a-v-for-loop-vue-2 -->
+                <input type="text" v-model="form.parent_id[wifi.ssid]"/>
+            </td>
+            <td>
+                <button type="submit" v-on:click="connect(wifi.ssid, form.parent_id[wifi.ssid])">Connect</button>
             </td>
         </tr>
     </table>

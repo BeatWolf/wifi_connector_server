@@ -16,37 +16,37 @@ use std::ops::Deref;
 #[get("/wifis")]
 fn index() -> Json<Vec<CustomWifi>> {
 
-    let mut echo_hello = Command::new("nmcli");
-    echo_hello.arg("-c").arg("no").arg("--terse").arg("dev").arg("wifi");
-    let hello_1 = echo_hello.output().expect("failed to execute process");
+    let mut wifi_vec = Vec::new();
 
-    let output = String::from_utf8_lossy(&hello_1.stdout);
+    if !cfg!(target_os = "windows") {
+        let mut echo_hello = Command::new("nmcli");
+        echo_hello.arg("-c").arg("no").arg("--terse").arg("dev").arg("wifi");
+        let hello_1 = echo_hello.output().expect("failed to execute process");
 
-    let mut wifis = HashMap::new();
+        let output = String::from_utf8_lossy(&hello_1.stdout);
 
-    for line in output.as_ref().lines() {
-        //lines.push(String::from(line));
+        let mut wifis = HashMap::new();
 
-        if !line.starts_with("IN-USE") {
-            let split_line = line.split(":").collect::<Vec<&str>>();
+        for line in output.as_ref().lines() {
+            //lines.push(String::from(line));
 
-            /*for i in 0..split_line.len(){
-                print!("{} {} ", i, split_line[i]);
-            }
-            println!();*/
+            if !line.starts_with("IN-USE") {
+                let split_line = line.split(":").collect::<Vec<&str>>();
 
-            if split_line.len() > 6 && split_line[1].len() > 0{
-                wifis.insert(String::from(split_line[1]), CustomWifi{ssid: String::from(split_line[1]), speed : String::from(split_line[4]), security: String::from(split_line[7])});
+                if split_line.len() > 6 && split_line[1].len() > 0{
+                    wifis.insert(String::from(split_line[1]), CustomWifi{ssid: String::from(split_line[1]), speed : String::from(split_line[4]), security: String::from(split_line[7])});
+                }
             }
         }
 
+        for(_, val) in wifis.iter(){
+            wifi_vec.push(val.clone());
+        }
+    }else{
+        wifi_vec.push(CustomWifi{ssid : String::from("ssid1"), speed: String::from("1"), security : String::from("wap")});
+        wifi_vec.push(CustomWifi{ssid : String::from("ssid2"), speed: String::from("2"), security : String::from("wpe")});
     }
 
-    let mut wifi_vec = Vec::new();
-
-    for(_, val) in wifis.iter(){
-        wifi_vec.push(val.clone());
-    }
 
     return Json(wifi_vec);
 }
@@ -58,7 +58,7 @@ pub struct CustomWifi {
     pub security : String
 }
 
-#[get("/wifi/<ssid>/connect")]
+#[post("/wifi/<ssid>/connect")]
 fn connect(ssid : &RawStr) -> String{
     return String::from("test");
 }

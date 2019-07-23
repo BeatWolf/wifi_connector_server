@@ -1,7 +1,10 @@
 var app = new Vue({
     el: '#app',
     data: {
-        wifis: []
+        wifis: [],
+        form: {
+            parent_id: []
+        }
     },
     mounted() {
         axios.get('api/wifis')
@@ -9,7 +12,7 @@ var app = new Vue({
     },
     methods: {
         connect(ssid, password) {
-            axios.get('api/wifi/'+ssid +"/connect")
+            axios.post('api/wifi/'+ssid +"/connect", {password: password})
         }
     }
 
